@@ -1,0 +1,9 @@
+version: '3'
+services:
+  productsapi:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: docker-gs-ping
+    ports:
+      - 9000:9000
