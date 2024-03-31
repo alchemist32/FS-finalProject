@@ -4,6 +4,6 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
-    image: docker-gs-ping
+    image: products-api
     ports:
       - 9000:9000
