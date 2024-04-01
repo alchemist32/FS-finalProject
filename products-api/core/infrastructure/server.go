@@ -5,14 +5,13 @@ import (
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"github.com/products-api/core/infrastructure/adapter/client/mock"
+	"github.com/products-api/core/infrastructure/router"
 )
 
 func Setup() *gin.Engine {
 	gin.SetMode(gin.DebugMode)
 	r := gin.New()
 	r.RedirectTrailingSlash = true
-	mock.NewMockClient()
 
 	r.Use(cors.New(cors.Config{
 		AllowMethods:     []string{"HEAD", "DELETE", "PUT", "POST", "GET", "OPTIONS", "PATCH"},
@@ -22,6 +21,9 @@ func Setup() *gin.Engine {
 		AllowAllOrigins:  true,
 		MaxAge:           1 * time.Hour,
 	}))
+
+	handlers := router.NewHandlers()
+	handlers.LoadRoutes(r)
 
 	return r
 }

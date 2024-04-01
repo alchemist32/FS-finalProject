@@ -1,6 +1,7 @@
 package mock
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 )
@@ -12,10 +13,10 @@ var (
 )
 
 type IMockClient interface {
-	GetItems() *[]map[string]any
-	GetItem(itemId int) (*map[string]any, error)
-	GetItemByBarcode(barcode string) (*map[string]any, error)
-	CreateItem(item map[string]any) (int, error)
+	GetItems() []byte
+	// GetItem(itemId int) ([]byte, error)
+	GetItemByBarcode(barcode string) ([]byte, error)
+	// CreateItem(item map[string]any) (int, error)
 	InitMockClient() (string, error)
 }
 
@@ -29,7 +30,7 @@ func NewMockClient() *MockClient {
 	return &mc
 }
 
-func (mc MockClient) InitMockClient() (string, error) {
+func (mc *MockClient) InitMockClient() (string, error) {
 	products := []map[string]any{
 		{
 			"id":          1,
@@ -72,11 +73,12 @@ func (mc MockClient) InitMockClient() (string, error) {
 	return SuccessDBMSG, nil
 }
 
-func (mc MockClient) GetItems() *[]map[string]any {
-	return &mc.data
+func (mc MockClient) GetItems() []byte {
+	jsonString, _ := json.Marshal(mc.data)
+	return jsonString
 }
 
-func (mc MockClient) GetItemByBarcode(barcode string) (*map[string]any, error) {
+func (mc MockClient) GetItemByBarcode(barcode string) ([]byte, error) {
 	var p *map[string]any
 	for _, product := range mc.data {
 		item := product["barcode"]
@@ -88,5 +90,7 @@ func (mc MockClient) GetItemByBarcode(barcode string) (*map[string]any, error) {
 	if p == nil {
 		return nil, NotFoundDBItem
 	}
-	return p, nil
+
+	jString, _ := json.Marshal(p)
+	return jString, nil
 }
