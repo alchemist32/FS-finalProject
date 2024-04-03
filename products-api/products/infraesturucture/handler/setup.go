@@ -9,7 +9,9 @@ import (
 func BuildProductsHandler() IProductHandler {
 	dbClient := mock.NewMockClient()
 	productHandler := NewProductsHandler(
-		usecases.NewGetAllProducts(*dao.NewProductsDAO(dbClient)))
+		usecases.NewGetAllProducts(*dao.NewProductsDAO(dbClient)),
+		usecases.NewAddProducts(*dao.NewProductsDAO(dbClient)),
+	)
 
 	return productHandler
 }

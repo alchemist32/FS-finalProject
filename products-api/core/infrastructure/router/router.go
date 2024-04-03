@@ -33,11 +33,10 @@ func (h Handlers) LoadRoutes(r *gin.Engine) *gin.Engine {
 		c.JSON(http.StatusOK, gin.H{"body": resp})
 	})
 
-	v1 := r.Group("v1", func(ctx *gin.Context) {
-		ctx.Set("accessLevel", "public")
-	})
+	v1 := r.Group("v1", func(ctx *gin.Context) {})
 	{
 		v1.GET("products", h.productsHandler.Get)
+		v1.POST("products", h.productsHandler.Post)
 	}
 	return r
 }

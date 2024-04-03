@@ -10,13 +10,14 @@ var (
 	SuccessDBMSG     = "connected successfully"
 	NotFoundDBItem   = errors.New("error: db item was not found")
 	AlreadyExistItem = errors.New("the Id already exist in db")
+	CannotAddItem    = errors.New("the item cannot be added")
 )
 
 type IMockClient interface {
 	GetItems() []byte
 	// GetItem(itemId int) ([]byte, error)
 	GetItemByBarcode(barcode string) ([]byte, error)
-	// CreateItem(item map[string]any) (int, error)
+	CreateItem(item map[string]any) (int, error)
 	InitMockClient() (string, error)
 }
 
@@ -93,4 +94,17 @@ func (mc MockClient) GetItemByBarcode(barcode string) ([]byte, error) {
 
 	jString, _ := json.Marshal(p)
 	return jString, nil
+}
+
+func (mc *MockClient) CreateItem(item map[string]any) (int, error) {
+	itemsSlice := mc.data[:]
+	currentLen := len(itemsSlice)
+	item["id"] = currentLen + 1
+	newState := append(itemsSlice, item)
+	dataLen := len(newState)
+	if currentLen == dataLen {
+		return 0, CannotAddItem
+	}
+	mc.data = newState
+	return dataLen - 1, nil
 }

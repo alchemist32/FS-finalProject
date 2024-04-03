@@ -19,6 +19,6 @@ func NewGetAllProducts(productsDAO dao.ProductsDAO) *getAllProducts {
 	}
 }
 
-func (p getAllProducts) Execute() (*[]models.Product, error) {
+func (p *getAllProducts) Execute() (*[]models.Product, error) {
 	return p.productsDAO.GetAllProducts()
 }
