@@ -11,6 +11,7 @@ func BuildProductsHandler() IProductHandler {
 	productHandler := NewProductsHandler(
 		usecases.NewGetAllProducts(*dao.NewProductsDAO(dbClient)),
 		usecases.NewAddProducts(*dao.NewProductsDAO(dbClient)),
+		usecases.NewGetProductByBarcode(*dao.NewProductsDAO(dbClient)),
 	)
 
 	return productHandler

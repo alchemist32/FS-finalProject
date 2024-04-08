@@ -3,6 +3,7 @@ package dao
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 
 	"github.com/products-api/core/infrastructure/adapter/client/mock"
 	"github.com/products-api/products/domain/models"
@@ -40,15 +41,31 @@ func (pdao ProductsDAO) AddProduct(product models.Product) error {
 	var item map[string]any
 
 	item = make(map[string]any)
-	item["ID"] = product.ID
-	item["Name"] = product.Name
-	item["Description"] = product.Description
-	item["Price"] = product.Price
-	item["Barcode"] = product.BarCode
-	item["Stock"] = product.Stock
+	item["id"] = product.ID
+	item["name"] = product.Name
+	item["description"] = product.Description
+	item["price"] = product.Price
+	item["barcode"] = product.BarCode
+	item["stock"] = product.Stock
 	_, err := pdao.Client.CreateItem(item)
 	if err != nil {
 		return ErrorAddProduct
 	}
 	return nil
+}
+
+func (pdao ProductsDAO) GetProductByBarCode(barcode string) (*models.Product, error) {
+	var product models.Product
+	result, err := pdao.Client.GetItemByBarcode(barcode)
+
+	if err != nil && errors.Is(mock.NotFoundDBItem, err) {
+		return nil, NotFoundProduct
+	}
+	errUnmarShal := json.Unmarshal(result, &product)
+
+	if errUnmarShal != nil {
+		return nil, UnmarshalError
+	}
+
+	return &product, nil
 }

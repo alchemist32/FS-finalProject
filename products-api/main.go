@@ -7,7 +7,6 @@ import (
 )
 
 func main() {
-	fmt.Println("Hello world!!")
 	r := infrastructure.Setup()
 	fmt.Println("products api: listen on port 9000")
 	err := r.Run(":9000")

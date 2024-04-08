@@ -22,7 +22,6 @@ func Setup() *gin.Engine {
 		MaxAge:           1 * time.Hour,
 	}))
 
-	// fmt.Println("I'm a Change")
 	handlers := router.NewHandlers()
 	handlers.LoadRoutes(r)
 

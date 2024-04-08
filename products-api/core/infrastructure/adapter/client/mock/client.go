@@ -74,7 +74,7 @@ func (mc *MockClient) InitMockClient() (string, error) {
 	return SuccessDBMSG, nil
 }
 
-func (mc MockClient) GetItems() []byte {
+func (mc *MockClient) GetItems() []byte {
 	jsonString, _ := json.Marshal(mc.data)
 	return jsonString
 }
@@ -85,6 +85,7 @@ func (mc MockClient) GetItemByBarcode(barcode string) ([]byte, error) {
 		item := product["barcode"]
 		if item == barcode {
 			p = &product
+			break
 		}
 	}
 
@@ -97,9 +98,9 @@ func (mc MockClient) GetItemByBarcode(barcode string) ([]byte, error) {
 }
 
 func (mc *MockClient) CreateItem(item map[string]any) (int, error) {
-	itemsSlice := mc.data[:]
+	itemsSlice := mc.data
 	currentLen := len(itemsSlice)
-	item["id"] = currentLen + 1
+	item["ID"] = currentLen + 1
 	newState := append(itemsSlice, item)
 	dataLen := len(newState)
 	if currentLen == dataLen {

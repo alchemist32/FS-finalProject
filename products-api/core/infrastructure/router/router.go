@@ -36,6 +36,7 @@ func (h Handlers) LoadRoutes(r *gin.Engine) *gin.Engine {
 	v1 := r.Group("v1", func(ctx *gin.Context) {})
 	{
 		v1.GET("products", h.productsHandler.Get)
+		v1.GET("products/:barcode", h.productsHandler.GetByBarcode)
 		v1.POST("products", h.productsHandler.Post)
 	}
 	return r
