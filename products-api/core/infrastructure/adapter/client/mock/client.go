@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"math/rand"
+	"time"
 )
 
 var (
@@ -18,6 +20,7 @@ type IMockClient interface {
 	// GetItem(itemId int) ([]byte, error)
 	GetItemByBarcode(barcode string) ([]byte, error)
 	CreateItem(item map[string]any) (int, error)
+	GetStock(itemId int) int
 	InitMockClient() (string, error)
 }
 
@@ -69,6 +72,7 @@ func (mc *MockClient) InitMockClient() (string, error) {
 			"price":       14.99,
 		},
 	}
+
 	mc.data = products
 	fmt.Println(SuccessDBMSG)
 	return SuccessDBMSG, nil
@@ -100,7 +104,7 @@ func (mc MockClient) GetItemByBarcode(barcode string) ([]byte, error) {
 func (mc *MockClient) CreateItem(item map[string]any) (int, error) {
 	itemsSlice := mc.data
 	currentLen := len(itemsSlice)
-	item["ID"] = currentLen + 1
+	item["id"] = currentLen + 1
 	newState := append(itemsSlice, item)
 	dataLen := len(newState)
 	if currentLen == dataLen {
@@ -108,4 +112,10 @@ func (mc *MockClient) CreateItem(item map[string]any) (int, error) {
 	}
 	mc.data = newState
 	return dataLen - 1, nil
+}
+
+func (mc *MockClient) GetStock(itemId int) int {
+	time.Sleep(300)
+	maxNumber := itemId * 100
+	return rand.Intn(maxNumber)
 }

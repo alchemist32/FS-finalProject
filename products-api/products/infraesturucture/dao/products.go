@@ -3,7 +3,6 @@ package dao
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 
 	"github.com/products-api/core/infrastructure/adapter/client/mock"
 	"github.com/products-api/products/domain/models"
@@ -68,4 +67,8 @@ func (pdao ProductsDAO) GetProductByBarCode(barcode string) (*models.Product, er
 	}
 
 	return &product, nil
+}
+
+func (pdao ProductsDAO) GetProductStockById(productId int) int {
+	return pdao.Client.GetStock(productId)
 }

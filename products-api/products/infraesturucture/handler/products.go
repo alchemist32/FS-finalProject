@@ -21,16 +21,19 @@ type ProductHandler struct {
 	getAllProductsUC    usecases.IGetAllProducts
 	addProductsUC       usecases.IAddProducts
 	getProductByBarcode usecases.IGetProductByBarcode
+	getProductStock     usecases.IGetProductStockById
 }
 
 func NewProductsHandler(
 	getAllProductsUC usecases.IGetAllProducts,
 	addProductsUC usecases.IAddProducts,
-	getByBarcode usecases.IGetProductByBarcode) IProductHandler {
+	getByBarcode usecases.IGetProductByBarcode,
+	getProductStock usecases.IGetProductStockById) IProductHandler {
 	return &ProductHandler{
 		getAllProductsUC:    getAllProductsUC,
 		addProductsUC:       addProductsUC,
 		getProductByBarcode: getByBarcode,
+		getProductStock:     getProductStock,
 	}
 }
 
@@ -64,6 +67,7 @@ func (ph ProductHandler) Post(c *gin.Context) {
 }
 
 func (ph ProductHandler) GetByBarcode(c *gin.Context) {
+	stockChan := make(chan int, 1)
 	barcode, _ := c.Params.Get("barcode")
 	product, err := ph.getProductByBarcode.Execute(barcode)
 
@@ -77,6 +81,11 @@ func (ph ProductHandler) GetByBarcode(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"message": "Something went wrong"})
 		return
 	}
+
+	go ph.getProductStock.Execute(product.ID, stockChan)
+
+	stock := <-stockChan
+	product.Stock = stock
 
 	c.JSON(http.StatusOK, product)
 }
