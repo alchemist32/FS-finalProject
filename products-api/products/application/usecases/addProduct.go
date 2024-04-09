@@ -2,7 +2,7 @@ package usecases
 
 import (
 	"github.com/products-api/products/domain/models"
-	"github.com/products-api/products/infraesturucture/dao"
+	"github.com/products-api/products/domain/repository"
 )
 
 type IAddProducts interface {
@@ -10,10 +10,10 @@ type IAddProducts interface {
 }
 
 type addProduct struct {
-	productsDAO dao.ProductsDAO
+	productsDAO repository.ProductsRepository
 }
 
-func NewAddProducts(productsDAO dao.ProductsDAO) *addProduct {
+func NewAddProducts(productsDAO repository.ProductsRepository) *addProduct {
 	return &addProduct{
 		productsDAO: productsDAO,
 	}

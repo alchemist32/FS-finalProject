@@ -4,7 +4,7 @@ import (
 	"errors"
 
 	"github.com/products-api/products/domain/models"
-	"github.com/products-api/products/infraesturucture/dao"
+	"github.com/products-api/products/domain/repository"
 )
 
 type IGetProductByBarcode interface {
@@ -12,20 +12,20 @@ type IGetProductByBarcode interface {
 }
 
 type getProductByBarcode struct {
-	productDAO dao.ProductsDAO
+	productRepo repository.ProductsRepository
 }
 
-func NewGetProductByBarcode(productDAO dao.ProductsDAO) *getProductByBarcode {
+func NewGetProductByBarcode(productRepo repository.ProductsRepository) *getProductByBarcode {
 	return &getProductByBarcode{
-		productDAO: productDAO,
+		productRepo: productRepo,
 	}
 }
 
 func (pdao *getProductByBarcode) Execute(barcode string) (*models.Product, error) {
-	product, err := pdao.productDAO.GetProductByBarCode(barcode)
+	product, err := pdao.productRepo.GetProductByBarCode(barcode)
 
-	if err != nil && errors.Is(dao.NotFoundProduct, err) {
-		return nil, dao.NotFoundProduct
+	if err != nil && errors.Is(repository.NotFoundProduct, err) {
+		return nil, repository.NotFoundProduct
 	}
 
 	if err != nil {

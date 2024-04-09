@@ -8,7 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/products-api/products/application/usecases"
 	"github.com/products-api/products/domain/models"
-	"github.com/products-api/products/infraesturucture/dao"
+	"github.com/products-api/products/domain/repository"
 )
 
 type IProductHandler interface {
@@ -71,7 +71,7 @@ func (ph ProductHandler) GetByBarcode(c *gin.Context) {
 	barcode, _ := c.Params.Get("barcode")
 	product, err := ph.getProductByBarcode.Execute(barcode)
 
-	if err != nil && errors.Is(dao.NotFoundProduct, err) {
+	if err != nil && errors.Is(repository.NotFoundProduct, err) {
 		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"message": "The product with that barcode does not exist"})
 		return
 	}

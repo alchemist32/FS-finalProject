@@ -1,21 +1,21 @@
 package usecases
 
-import "github.com/products-api/products/infraesturucture/dao"
+import "github.com/products-api/products/domain/repository"
 
 type IGetProductStockById interface {
 	Execute(productId int, channel chan int)
 }
 
 type getProductStockById struct {
-	productDAO dao.ProductsDAO
+	productRepo repository.ProductsRepository
 }
 
-func NewGetProductStockById(productDAO dao.ProductsDAO) *getProductStockById {
+func NewGetProductStockById(productRepo repository.ProductsRepository) *getProductStockById {
 	return &getProductStockById{
-		productDAO: productDAO,
+		productRepo: productRepo,
 	}
 }
 
 func (pdao *getProductStockById) Execute(productId int, channel chan int) {
-	channel <- pdao.productDAO.GetProductStockById(productId)
+	channel <- pdao.productRepo.GetProductStockById(productId)
 }
