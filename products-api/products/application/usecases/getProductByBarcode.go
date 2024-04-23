@@ -15,12 +15,15 @@ type getProductByBarcode struct {
 	productRepo repository.ProductsRepository
 }
 
+// NewGetProductByBarcode initialize the use case
 func NewGetProductByBarcode(productRepo repository.ProductsRepository) *getProductByBarcode {
 	return &getProductByBarcode{
 		productRepo: productRepo,
 	}
 }
 
+// Execute retrieves a product
+// It will return a product struct or an error y something went wrong
 func (pdao *getProductByBarcode) Execute(barcode string) (*models.Product, error) {
 	product, err := pdao.productRepo.GetProductByBarCode(barcode)
 

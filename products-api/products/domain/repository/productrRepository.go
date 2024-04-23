@@ -32,6 +32,7 @@ func NewProductsRepo(client mock.IMockClient) *ProductsRepository {
 	}
 }
 
+// GetAllProducts retrieves the list of products from the DB
 func (pdao ProductsRepository) GetAllProducts() (*[]models.Product, error) {
 	var result []models.Product
 
@@ -44,6 +45,7 @@ func (pdao ProductsRepository) GetAllProducts() (*[]models.Product, error) {
 	return &result, nil
 }
 
+// AddProduct using the provided argument add a new product to the list
 func (pdao ProductsRepository) AddProduct(product models.Product) error {
 	var item map[string]any
 
@@ -61,6 +63,7 @@ func (pdao ProductsRepository) AddProduct(product models.Product) error {
 	return nil
 }
 
+// GetProductByBarCode retrieves the corresponding product using the barcode
 func (pdao ProductsRepository) GetProductByBarCode(barcode string) (*models.Product, error) {
 	var product models.Product
 	result, err := pdao.Client.GetItemByBarcode(barcode)
@@ -77,6 +80,7 @@ func (pdao ProductsRepository) GetProductByBarCode(barcode string) (*models.Prod
 	return &product, nil
 }
 
+// GetProductStockById retrieves the stock for given product
 func (pdao ProductsRepository) GetProductStockById(productId int) int {
 	return pdao.Client.GetStock(productId)
 }

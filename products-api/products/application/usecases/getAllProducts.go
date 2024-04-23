@@ -13,12 +13,14 @@ type getAllProducts struct {
 	productsDAO repository.ProductsRepository
 }
 
+// NewGetAllProducts initialize the use case
 func NewGetAllProducts(productsDAO repository.ProductsRepository) *getAllProducts {
 	return &getAllProducts{
 		productsDAO: productsDAO,
 	}
 }
 
+// Execute retrieves the list of products
 func (p *getAllProducts) Execute() (*[]models.Product, error) {
 	return p.productsDAO.GetAllProducts()
 }
