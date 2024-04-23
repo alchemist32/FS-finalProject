@@ -4,6 +4,8 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
+      args:
+        - SERVER_PORT=$SERVER_PORT
     image: products-api
     ports:
       - 9000:9000
